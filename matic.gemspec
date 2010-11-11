@@ -18,4 +18,8 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
+
+  s.add_dependency("mongomatic", "~> 0.6.0")
+  s.add_development_dependency("bson_ext", "~> 1.1.0")
+  s.add_development_dependency("rspec", "~> 2.0.0")
 end

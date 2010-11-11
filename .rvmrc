@@ -1,0 +1,2 @@
+rvm --create use 1.9.2@matic
+rvm wrapper 1.9.2@matic
