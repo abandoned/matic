@@ -25,5 +25,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency("bson_ext", "~> 1.1.0")
   s.add_development_dependency("rake", "~> 0.8.7")
   s.add_development_dependency("rspec", "~> 2.0.0")
-  s.add_development_dependency("ruby-debug19", "~> 0.11.0")
+  #s.add_development_dependency("ruby-debug19", "~> 0.11.0")
 end
