@@ -1,0 +1,2 @@
+rvm ree@matic,1.9.2@matic exec bundle install
+rvm ree@matic,1.9.2@matic rake
