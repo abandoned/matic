@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "A matic model" do
+describe "a mongomatic model that includes matic" do
 
   let(:person) { Person.new }
 
@@ -24,114 +24,128 @@ describe "A matic model" do
     end
   end
 
-  context "dirty tracking" do
+  shared_examples_for "a dirty-tracking command" do
 
-    shared_examples_for "a dirty-tracking command" do
+    it "marks a current change as previous" do
+      person.first_name_changed?.should be_false
+      person.previous_changes["first_name"].should eql [nil, "John"]
 
-      it "marks a current change as previous" do
-        person.first_name_changed?.should be_false
-        person.previous_changes["first_name"].should eql [nil, "John"]
-
-        person.last_name_changed?.should be_false
-        person.previous_changes["last_name"].should eql [nil, "Doe"]
-      end
-
-      it "does callbacks" do
-        person.instance_variable_get(:@called_back).should be_true
-      end
-
+      person.last_name_changed?.should be_false
+      person.previous_changes["last_name"].should eql [nil, "Doe"]
     end
 
-    shared_examples_for "a dirty object" do
-
-      it "tells if an attribute changed" do
-        person.first_name_changed?.should be_true
-        person.last_name_changed?.should be_true
-      end
-
-      it "remembers changes to an attribute" do
-        person.changes["first_name"].should eql [nil, "John"]
-        person.changes["last_name"].should eql [nil, "Doe"]
-      end
-
+    it "does callbacks" do
+      person.instance_variable_get(:@called_back).should be_true
     end
 
-    context "when object is new" do
+  end
 
-      before do
-        person.first_name = "John"
-        person.last_name = "Doe"
-      end
+  describe "a dirty-tracking setter" do
 
-      it_behaves_like "a dirty object"
+    context "when an attribute is set" do
 
-      describe "#insert" do
+      context "and its value has changed" do
 
-        before { person.insert }
+        before do
+          person.first_name = "John"
+        end
 
-        it_behaves_like "a dirty-tracking command"
+        it "marks the attribute as changed" do
+          person.first_name_changed?.should be_true
+        end
 
-      end
-
-      describe "#insert!" do
-
-        before { person.insert! }
-
-        it_behaves_like "a dirty-tracking command"
+        it "remembers changes to the attribute" do
+          person.changes["first_name"].should eql [nil, "John"]
+        end
 
       end
 
-      describe "#save" do
+      context "and its value has not changed" do
 
-        before { person.save }
+        before do
+          person.first_name = nil
+        end
 
-        it_behaves_like "a dirty-tracking command"
+        it "does not mark the attribute as changed" do
+          person.first_name_changed?.should be_false
+        end
 
       end
 
     end
 
-    context "when object is not new" do
+  end
 
-      before do
-        person.insert
-        person.instance_variable_set(:@called_back, false)
-        person.first_name = "John"
-        person.last_name = "Doe"
-      end
+  context "when object is new" do
 
-      it_behaves_like "a dirty object"
+    before do
+      person.first_name = "John"
+      person.last_name = "Doe"
+    end
 
-      describe "#update" do
+    describe "#insert" do
 
-        before { person.update }
+      before { person.insert }
 
-        it_behaves_like "a dirty-tracking command"
-
-      end
-
-      describe "#update!" do
-
-        before { person.update! }
-
-        it_behaves_like "a dirty-tracking command"
-
-      end
+      it_behaves_like "a dirty-tracking command"
 
     end
 
-    context "when object is not valid" do
+    describe "#insert!" do
 
-      before do
-        person.stub!(:valid?).and_return(false)
-        person.first_name = "John"
-      end
+      before { person.insert! }
 
-      it "does not clear changes" do
-        person.save
-        person.first_name_changed?.should be_true
-      end
+      it_behaves_like "a dirty-tracking command"
 
+    end
+
+    describe "#save" do
+
+      before { person.save }
+
+      it_behaves_like "a dirty-tracking command"
+
+    end
+
+  end
+
+  context "when object is not new" do
+
+    before do
+      person.insert
+      person.instance_variable_set(:@called_back, false)
+      person.first_name = "John"
+      person.last_name = "Doe"
+    end
+
+    describe "#update" do
+
+      before { person.update }
+
+      it_behaves_like "a dirty-tracking command"
+
+    end
+
+    describe "#update!" do
+
+      before { person.update! }
+
+      it_behaves_like "a dirty-tracking command"
+
+    end
+
+  end
+
+  context "when an invalid object is saved" do
+
+    before do
+      person.stub!(:valid?).and_return(false)
+      person.first_name = "John"
+    end
+
+    it "does not clear changes" do
+      person.save
+      person.first_name_changed?.should be_true
     end
 
   end
