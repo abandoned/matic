@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency("activemodel", "~> 3.0.0")
   s.add_dependency("activesupport", "~> 3.0.0")
   s.add_development_dependency("bson_ext", "~> 1.1.0")
+  s.add_development_dependency("faker", "~> 0.3.1")
   s.add_development_dependency("rake", "~> 0.8.7")
   s.add_development_dependency("rspec", "~> 2.0.0")
   if RUBY_PLATFORM.include?("1.9")
