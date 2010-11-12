@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    matic (0.1.1)
+    matic (0.2.0)
       activemodel (~> 3.0.0)
       activesupport (~> 3.0.0)
       mongomatic (~> 0.6.0)
