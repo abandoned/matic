@@ -11,17 +11,17 @@ module Matic
 
     def fields(*attrs)
       if attrs.first.is_a? Hash
-        attrs.first.each { |k, v| define_accessor(k, v) }
+        attrs.first.each { |n, f| define_accessors(n, f) }
         define_attribute_methods(attrs.first.keys)
       else
-        attrs.each { |k, v| define_accessor(k, v) }
+        attrs.each { |n| define_accessors(n) }
         define_attribute_methods(attrs)
       end
     end
 
     private
 
-    def define_accessor(attr_name, attr_field=nil)
+    def define_accessors(attr_name, attr_field=nil)
       attr_field ||= attr_name
 
       define_method(attr_name) do
@@ -39,11 +39,11 @@ module Matic
   end
 
   def insert(opts={})
-    clear_changes if super
+    super && clear_changes
   end
 
   def update(opts={}, update_doc=@doc)
-    clear_changes if super
+    super && clear_changes
   end
 
   def save
