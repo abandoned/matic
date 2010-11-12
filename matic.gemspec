@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Hakan Ensari", "Gerhard Lazu"]
   s.email       = ["code@papercavalier.com"]
   s.homepage    = "http://github.com/papercavalier/matic"
-  s.summary     = %q{Mongomatic with attribute accessors and dirty tracking}
-  s.description = %q{Matic adds attribute accessors and dirty tracking to Mongomatic.}
+  s.summary     = %q{A dirtier Mongomatic}
+  s.description = %q{Matic adds attribute accessors and dirty tracking to Mongomatic and optionally shortens field names saved to MongoDB.}
 
   s.rubyforge_project = "matic"
 

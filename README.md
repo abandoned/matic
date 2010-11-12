@@ -1,7 +1,12 @@
 # Matic
 
-Matic adds attribute accessors and dirty tracking to Mongomatic and
-optionally shortens field names to optimize storing and indexing.
+Matic is a dirtier Mongomatic.
+
+Matic adds attribute accessors and dirty tracking to Mongomatic,
+defaults the collection name to the plural of the class name, and
+optionally shortens field names saved to MongoDB.
+
+![Matic](http://github.com/papercavalier/matic/raw/master/le_fou.jpg)
 
 ## Examples
 
@@ -32,7 +37,7 @@ optionally shortens field names to optimize storing and indexing.
     person.previous_changes["first_name"]
     => [nil, "John"]
 
-This is a model with short field names:
+A model with short field names:
 
     class Person < Mongomatic::Base
       include Matic
