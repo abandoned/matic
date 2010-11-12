@@ -9,33 +9,31 @@ module Matic
       self.name.tableize
     end
 
-    def field(attr_name)
-      generate_attribute_methods(attr_name)
-
-      define_method(attr_name) do
-        self[attr_name.to_s]
-      end
-
-      define_method("#{attr_name}=") do |val|
-        unless val == self[attr_name.to_s]
-          eval("#{attr_name}_will_change!")
-        end
-
-        self[attr_name.to_s] = val
+    def fields(*attrs)
+      if attrs.first.is_a? Hash
+        attrs.first.each { |k, v| define_accessor(k, v) }
+        define_attribute_methods(attrs.first.keys)
+      else
+        attrs.each { |k, v| define_accessor(k, v) }
+        define_attribute_methods(attrs)
       end
     end
 
     private
 
-    def generate_attribute_methods(attr_name)
-      attribute_method_matchers.each do |matcher|
-        method_name = matcher.method_name(attr_name)
+    def define_accessor(attr_name, attr_field=nil)
+      attr_field ||= attr_name
 
-        generated_attribute_methods.module_eval <<-STR, __FILE__, __LINE__ + 1
-          def #{method_name}(*args)
-            send(:#{matcher.method_missing_target}, '#{attr_name}', *args)
-          end
-        STR
+      define_method(attr_name) do
+        self[attr_field.to_s]
+      end
+
+      define_method("#{attr_name}=") do |val|
+        unless val == self[attr_field.to_s]
+          eval("#{attr_name}_will_change!")
+        end
+
+        self[attr_field.to_s] = val
       end
     end
   end

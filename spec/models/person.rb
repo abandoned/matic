@@ -1,8 +1,8 @@
 class Person < Mongomatic::Base
   include Matic
 
-  field :first_name
-  field :last_name
+  fields :first_name,
+         :last_name
 
   private
 

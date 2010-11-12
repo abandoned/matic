@@ -3,25 +3,58 @@ require "spec_helper"
 describe "a mongomatic model that includes matic" do
 
   let(:person) { Person.new }
+  let(:book) { Book.new }
 
   it "has a collection first_name" do
     person.class.collection_name.should eql "people"
   end
 
-  describe ".field" do
-    it "defines a getter" do
-      person["first_name"] = "John"
+  describe ".fields" do
 
-      person.first_name.should eql "John"
-      lambda { person.foo }.should raise_error NoMethodError
+    context "when it is passed an array" do
+
+      it "defines a getter" do
+        person["first_name"] = "John"
+
+        person.first_name.should eql "John"
+        lambda { person.foo }.should raise_error NoMethodError
+      end
+
+      it "defines a setter" do
+        person.first_name = "John"
+
+        person["first_name"].should eql "John"
+        lambda { person.foo= "bar" }.should raise_error NoMethodError
+      end
+
     end
 
-    it "defines a setter" do
-      person.first_name = "John"
+    context "when it is passed a hash" do
 
-      person["first_name"].should eql "John"
-      lambda { person.foo= "bar" }.should raise_error NoMethodError
+      it "defines a getter" do
+        book["i"] = "9780485113358"
+        book.isbn.should eql "9780485113358"
+
+        book["a"] = ["Gilles Deleuze"]
+        book.authors.should eql ["Gilles Deleuze"]
+      end
+
+      it "defines a setter" do
+        book.isbn = "9780485113358"
+        book["i"].should eql "9780485113358"
+
+        book.authors = ["Gilles Deleuze"]
+        book["a"].should eql ["Gilles Deleuze"]
+      end
+
+      it "stores documents with short field names" do
+        book.isbn = "9780485113358"
+        book.insert
+
+        book.instance_variable_get(:@doc).should have_key 'i'
+      end
     end
+
   end
 
   shared_examples_for "a dirty-tracking command" do
