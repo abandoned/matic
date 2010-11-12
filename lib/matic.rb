@@ -44,16 +44,8 @@ module Matic
     clear_changes if super
   end
 
-  def insert!(opts={})
-    insert(opts.merge(:safe => true))
-  end
-
   def update(opts={}, update_doc=@doc)
     clear_changes if super
-  end
-
-  def update!(opts={}, update_doc=@doc)
-    update(opts.merge(:safe => true), update_doc)
   end
 
   def save
