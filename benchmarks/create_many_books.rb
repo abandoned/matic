@@ -6,7 +6,7 @@ many = STDIN.gets.to_i
 
 Benchmark.bmbm do |x|
 
-  Book.collection.remove
+  Book.drop
 
   x.report("mongomatic") do
     many.times do
@@ -18,7 +18,7 @@ Benchmark.bmbm do |x|
     end
   end
 
-  Book.collection.remove
+  Book.drop
 
   x.report("matic") do
     many.times do
