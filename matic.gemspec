@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("faker", "~> 0.3.1")
   s.add_development_dependency("rake", "~> 0.8.7")
   s.add_development_dependency("rspec", "~> 2.0.0")
-  if RUBY_PLATFORM.include?("1.9")
+  if RUBY_VERSION.include?("1.9")
     s.add_development_dependency("ruby-debug19", "~> 0.11.0")
   end
 end
